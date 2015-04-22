@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIB.Training.BusinessComponets", "RIB.Training.BusinessComponets\RIB.Training.BusinessComponets.csproj", "{A909058A-9B25-41FC-87DB-79D740A34F75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RIB.Training.UnitTest", "RIB.Training.UnitTest\RIB.Training.UnitTest.csproj", "{A8B5D01E-C971-4886-B9F4-5C4E159162FA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A909058A-9B25-41FC-87DB-79D740A34F75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A909058A-9B25-41FC-87DB-79D740A34F75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A909058A-9B25-41FC-87DB-79D740A34F75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A909058A-9B25-41FC-87DB-79D740A34F75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8B5D01E-C971-4886-B9F4-5C4E159162FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8B5D01E-C971-4886-B9F4-5C4E159162FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8B5D01E-C971-4886-B9F4-5C4E159162FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8B5D01E-C971-4886-B9F4-5C4E159162FA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
