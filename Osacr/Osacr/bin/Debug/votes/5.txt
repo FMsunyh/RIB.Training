@@ -1,0 +1,8 @@
+voter:Roy
+The best movie:The Hobbit
+The best music:Lonely
+The best director:Peter Jackson
+The best actor:Milla
+The best actress:Bingbing Li
+The best walking gentleman:Shawn
+The best walking lady:Aryana

@@ -1,0 +1,8 @@
+voter:Elain
+The best movie:Blackhat
+The best music:Lonely
+The best director:Peter Jackson
+The best actor:Milla
+The best actress:Bingbing Li
+The best walking gentleman:Shawn
+The best walking lady:Aryana

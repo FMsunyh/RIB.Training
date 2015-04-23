@@ -1,0 +1,8 @@
+voter:Lizzie
+The best movie:Journey to the West
+The best music:Find you
+The best director:Peter Jackson
+The best actor:Milla
+The best actress:Bingbing Li
+The best walking gentleman:Shawn
+The best walking lady:Aryana
