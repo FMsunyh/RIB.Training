@@ -9,20 +9,19 @@ namespace RIB.Training.EF
 {
     public class EF
     {
-        private static TrainingEntities _context = new TrainingEntities();
-
         public EF() { }
 
         //Returns the first element of a sequence. 
         public static BAS_TODOITEM GetFirst()
         {
             BAS_TODOITEM itemFirst = null;
-            var items = from item in _context.BAS_TODOITEM orderby item.ID ascending, item.SORTING ascending select item;
-            //if (items.Count() > 0)
-            //{
-            //    itemFirst = items.First();
-            //}
-            itemFirst = items.FirstOrDefault();
+
+            using (TrainingEntities context = new TrainingEntities())
+            {
+                var items = from item in context.BAS_TODOITEM orderby item.ID ascending, item.SORTING ascending select item;
+
+                itemFirst = items.FirstOrDefault();
+            }
             return itemFirst;
         }
 
@@ -30,13 +29,13 @@ namespace RIB.Training.EF
         public static BAS_TODOITEM GetLast()
         {
             BAS_TODOITEM itemLast = null;
-            var items = from item in _context.BAS_TODOITEM orderby item.ID descending, item.SORTING descending select item;
-            //if (items.Count() > 0)
-            //{
-            //    //itemLast = items.LastOrDefault();
-            //    itemLast = items.First();
-            //}
-            itemLast = items.LastOrDefault<BAS_TODOITEM>();
+
+            using (TrainingEntities context = new TrainingEntities())
+            {
+                var items = from item in context.BAS_TODOITEM orderby item.ID descending, item.SORTING descending select item;
+
+                itemLast = items.FirstOrDefault();
+            }
 
             return itemLast;
         }
@@ -44,14 +43,15 @@ namespace RIB.Training.EF
         //Returns an element of a sequence by the id.
         public static BAS_TODOITEM GetById(int id)
         {
-            BAS_TODOITEM itemGetById = null;
-            var items = from item in _context.BAS_TODOITEM where item.ID == id select item;
-            if (items.Count() > 0)
+            BAS_TODOITEM itemsGetById = null;
+
+            using (TrainingEntities context = new TrainingEntities())
             {
-                itemGetById = items.First();
+                var items = from item in context.BAS_TODOITEM where item.ID == id select item;
+                itemsGetById = items.FirstOrDefault();
             }
 
-            return itemGetById;
+            return itemsGetById;
         }
 
 
@@ -59,10 +59,14 @@ namespace RIB.Training.EF
         public static List<BAS_TODOITEM> GetAll()
         {
             List<BAS_TODOITEM> itemList = new List<BAS_TODOITEM>();
-            var items = from item in _context.BAS_TODOITEM orderby item.SORTING ascending select item;
-            foreach (var item in items)
+
+            using (TrainingEntities context = new TrainingEntities())
             {
-                itemList.Add(item as BAS_TODOITEM);
+                var items = from item in context.BAS_TODOITEM orderby item.SORTING ascending select item;
+                foreach (var item in items)
+                {
+                    itemList.Add(item as BAS_TODOITEM);
+                }
             }
 
             return itemList;
@@ -72,69 +76,130 @@ namespace RIB.Training.EF
         public static BAS_TODOITEM GetDefault()
         {
             BAS_TODOITEM itemDefault = null;
-            var items = from item in _context.BAS_TODOITEM where item.ISDEFAULT == true select item;
-            if (items.Count() > 0)
+
+            using (TrainingEntities context = new TrainingEntities())
             {
-                itemDefault = items.First();
+                var items = from item in context.BAS_TODOITEM where item.ISDEFAULT == true select item;
+
+                itemDefault = items.FirstOrDefault();
+
+                if (itemDefault == null)
+                {
+                    items = from item in context.BAS_TODOITEM orderby item.SORTING ascending, item.ID ascending select item;
+                    itemDefault = items.FirstOrDefault();
+                }
             }
-            //else
-            //{
-            //    items = from item in _context.BAS_TODOITEM orderby item.SORTING ascending, item.ID ascending select item;
-            //}
 
             return itemDefault;
         }
 
         //save or update an elements of a sequence.
-        public static bool SaveUpdate(BAS_TODOITEM item)
+        public static bool SaveUpdate(params BAS_TODOITEM[] items)
         {
             BAS_TODOITEM itemUpdate = null;
-            itemUpdate = GetById(item.ID);
 
-            if (itemUpdate == null)
+            using (TrainingEntities context = new TrainingEntities())
             {
-                Create(item);
-            }
-            else
-            {
-                itemUpdate.SORTING = item.SORTING;
-                itemUpdate.DESCRIPTION = item.DESCRIPTION;
-                itemUpdate.UPDATEDDATE = item.UPDATEDDATE;
-                itemUpdate.VERSION = itemUpdate.VERSION + 1;
-                _context.SaveChanges();
+                foreach (BAS_TODOITEM item in items)
+                {
+                    itemUpdate = GetById(item.ID);
+
+                    if (itemUpdate == null)
+                    {
+                        Create(item);
+                    }
+                    else
+                    {
+                        itemUpdate.SORTING = item.SORTING;
+                        itemUpdate.DESCRIPTION = item.DESCRIPTION;
+                        itemUpdate.UPDATEDDATE = item.UPDATEDDATE;
+                        itemUpdate.VERSION = itemUpdate.VERSION + 1;
+                    }
+                }
+
+                context.SaveChanges();
             }
 
             return true;
         }
 
         //create an elements of a sequence.
-        public static bool Create(BAS_TODOITEM item)
+        public static bool Create(params BAS_TODOITEM[] items)
         {
-            if (item == null)
+            if (items == null)
             {
                 return false;
             }
 
-            _context.BAS_TODOITEM.Add(item);
-            _context.SaveChanges();
+            using (TrainingEntities context = new TrainingEntities())
+            {
+                foreach (BAS_TODOITEM item in items)
+                {
+                    context.BAS_TODOITEM.Add(item);
+                }
+
+                context.SaveChanges();
+            }
+
+            return true;
+        }
+
+        //delete an elements of a sequence by id.
+        public static bool Delete(params int[] itemIds)
+        {
+            //List<BAS_TODOITEM> deleteItemList = null;
+
+            //deleteItemList = GetById(itemIds);
+            //if (deleteItemList == null)
+            //{
+            //    return false;
+            //}
+
+            //_context.BAS_TODOITEM.Remove(deleteItemList);
+
+            //_context.SaveChanges();
+
+            // BAS_TODOITEM deleteItem = null;
+            using (TrainingEntities context = new TrainingEntities())
+            {
+                foreach (int itemId in itemIds)
+                {
+                    BAS_TODOITEM deleteItem = new BAS_TODOITEM() { ID = itemId };
+                    //BAS_TODOITEM deleteItem = GetById(itemId);
+                    context.Entry<BAS_TODOITEM>(deleteItem).State = EntityState.Deleted;
+                }
+                context.SaveChanges();
+            }
+
             return true;
         }
 
         //delete an elements of a sequence.
-        public static bool Delete(int itemId)
+        public static bool Delete(params BAS_TODOITEM[] items)
         {
-            BAS_TODOITEM deleteItem = GetById(itemId);
-            if (deleteItem == null)
+            //List<BAS_TODOITEM> deleteItemList = null;
+
+            //deleteItemList = GetById(itemIds);
+            //if (deleteItemList == null)
+            //{
+            //    return false;
+            //}
+
+            //_context.BAS_TODOITEM.Remove(deleteItemList);
+
+            //_context.SaveChanges();
+
+            using (TrainingEntities context = new TrainingEntities())
             {
-                return false;
+                foreach (BAS_TODOITEM item in items)
+                {
+                    BAS_TODOITEM deleteItem = new BAS_TODOITEM() { ID = item.ID };
+                    //BAS_TODOITEM deleteItem = GetById(item.ID);
+                    context.Entry<BAS_TODOITEM>(deleteItem).State = EntityState.Deleted;
+                }
+                context.SaveChanges();
             }
 
-            _context.BAS_TODOITEM.Remove(deleteItem);
-            _context.SaveChanges();
-
-            //BAS_TODOITEM deleteItem = new BAS_TODOITEM() { ID = itemId };
-            //context.Entry<BAS_TODOITEM>(deleteItem).State = EntityState.Deleted;
-            //context.SaveChanges();
             return true;
         }
 
@@ -142,10 +207,14 @@ namespace RIB.Training.EF
         public static List<BAS_TODOITEM> Search(string description)
         {
             List<BAS_TODOITEM> itemList = new List<BAS_TODOITEM>();
-            var items = from item in _context.BAS_TODOITEM orderby item.SORTING ascending where item.DESCRIPTION.Contains(description) select item;
-            foreach (var item in items)
+
+            using (TrainingEntities context = new TrainingEntities())
             {
-                itemList.Add(item);
+                var items = from item in context.BAS_TODOITEM orderby item.SORTING ascending where item.DESCRIPTION.Contains(description) select item;
+                foreach (var item in items)
+                {
+                    itemList.Add(item);
+                }
             }
 
             return itemList;
